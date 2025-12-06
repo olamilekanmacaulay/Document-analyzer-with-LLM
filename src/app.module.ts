@@ -28,4 +28,4 @@ import { Document } from './documents/document.entity';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

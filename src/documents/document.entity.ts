@@ -1,4 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
 
 @Entity()
 export class Document {
@@ -9,7 +14,7 @@ export class Document {
   filename: string;
 
   @Column()
-  s3Key: string;
+  storagePath: string;
 
   @Column()
   mimeType: string;

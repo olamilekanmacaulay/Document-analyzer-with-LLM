@@ -5,8 +5,8 @@ import { DocumentService } from './document.service';
 import { DocumentController } from './document.controller';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Document])],
-    controllers: [DocumentController],
-    providers: [DocumentService],
+  imports: [TypeOrmModule.forFeature([Document])],
+  controllers: [DocumentController],
+  providers: [DocumentService],
 })
-export class DocumentModule { }
+export class DocumentModule {}
