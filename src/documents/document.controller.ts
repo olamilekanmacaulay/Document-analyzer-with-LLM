@@ -15,7 +15,7 @@ import { DocumentService } from './document.service';
 
 @Controller('documents')
 export class DocumentController {
-  constructor(private readonly documentService: DocumentService) {}
+  constructor(private readonly documentService: DocumentService) { }
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
@@ -24,7 +24,10 @@ export class DocumentController {
       new ParseFilePipe({
         validators: [
           new MaxFileSizeValidator({ maxSize: 5 * 1024 * 1024 }), // 5MB
-          new FileTypeValidator({ fileType: 'application/pdf' }),
+          new FileTypeValidator({
+            fileType:
+              /(application\/pdf|application\/vnd.openxmlformats-officedocument.wordprocessingml.document)/,
+          }),
         ],
       }),
     )
