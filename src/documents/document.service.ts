@@ -7,6 +7,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 const pdf = require('pdf-parse');
 
 import { ConfigService } from '@nestjs/config';
+import { StorageService } from '../storage/storage.service';
 
 @Injectable()
 export class DocumentService {
@@ -16,6 +17,7 @@ export class DocumentService {
     @InjectRepository(Document)
     private documentRepository: Repository<Document>,
     private configService: ConfigService,
+    private storageService: StorageService,
   ) {
     const apiKey = this.configService.get<string>('GEMINI_API_KEY');
     if (!apiKey) {
@@ -26,13 +28,14 @@ export class DocumentService {
 
   async create(file: Express.Multer.File): Promise<Document> {
     const text = await this.extractText(file);
+    const storagePath = await this.storageService.uploadFile(file);
 
     const doc = this.documentRepository.create({
       filename: file.originalname,
       mimeType: file.mimetype,
       extractedText: text,
       status: 'pending',
-      storagePath: 'local/' + file.originalname,
+      storagePath: storagePath,
     });
 
     return this.documentRepository.save(doc);
@@ -72,7 +75,7 @@ export class DocumentService {
 
     try {
       const model = this.genAI.getGenerativeModel({
-        model: 'gemini-2.0-flash',
+        model: 'gemini-2.5-flash',
       });
       const result = await model.generateContent(prompt);
       const response = result.response;
