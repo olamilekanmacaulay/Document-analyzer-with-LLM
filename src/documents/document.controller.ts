@@ -34,13 +34,19 @@ export class DocumentController {
     file: Express.Multer.File,
   ) {
     const doc = await this.documentService.create(file);
-    return { id: doc.id };
+    return {
+      id: doc.id,
+      message: 'Document uploaded successfully',
+    };
   }
 
   @Post(':id/analyze')
   @HttpCode(200)
   async analyze(@Param('id') id: string) {
     await this.documentService.analyze(id);
+    return {
+      message: "Document analyzed. Summary is available at /documents/:id"
+    }
   }
 
   @Get(':id')
